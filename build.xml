@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="MadnetSim" basedir="." default="jar">
+
+	<property name="version.num" value="2.00"/>
+	
+	<!-- Add all the jar files in lib folder to the class path -->
+	
+	<path id="build.classpath">
+		<fileset dir= "${basedir}/">
+			<include name="lib/*.jar" />
+		</fileset>
+	</path>
+	
+
+	<pathconvert property="project.classpath" pathsep=" ">
+		<path refid="build.classpath"/>
+        <map from="*.jar" to="lib/*.jar"/>
+	</pathconvert>
+	
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target depends="clean" name="compile">
+    	<mkdir dir="build/classes"/>
+    	<mkdir dir="build/classes/res"/>
+    	<mkdir dir="build/lib"/>
+    	    	
+    	<copy todir="build/lib">
+    	  <fileset dir="lib">
+    	    <include name="**/*.jar"/>
+    	  </fileset>
+    	</copy>
+    	    	
+        <javac srcdir="src" destdir="build/classes"
+        	source="1.5"
+        	target="1.5"
+        	debug="true"
+        	>
+        	<classpath>
+                <path refid="build.classpath" />
+            </classpath>
+    	</javac>
+    	
+    </target>
+
+    <target depends="compile" name="jar">
+    	<delete file="MANIFEST.MF"/>
+    	<buildnumber file="build.number"/>
+    	<tstamp>
+	     <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+	    </tstamp>
+
+    	<manifest file="MANIFEST.MF">
+	        <attribute name="Built-By" value="${user.name}"/>
+	        <attribute name="Main-Class" value="MadnetSim.main"/>
+	        <attribute name="Implementation-Version" 
+	                     value="${version.num}-b${build.number}"/> 
+    		<attribute name="Built-Date" value="${TODAY}"/>
+    	</manifest>
+		<echo message= "Build ${build.number}"/>
+    	
+        <mkdir dir="build/jar"/>
+    	<copy todir="build/jar">
+    	  <fileset dir="${basedir}">
+    	    <include name="taximap.png"/>
+    	    <include name="launch.sh"/>
+    	  </fileset>
+      	</copy>
+    	
+        <mkdir dir="build/jar/config"/>
+    	<copy todir="build/jar/config">
+		  <fileset dir="config">
+      	  	<include name="**/*"/>
+      	  </fileset>
+    	</copy>
+
+        <jar jarfile="build/jar/${ant.project.name}.jar">
+        	<fileset dir="build/classes" />
+        	
+        <zipfileset excludes="META-INF/*" src="build/lib/core.jar" />
+        <zipfileset excludes="META-INF/*" src="build/lib/colt-1.2.0.jar" />
+        <zipfileset excludes="META-INF/*" src="build/lib/concurrent-1.3.4.jar" />
+        <zipfileset excludes="META-INF/*" src="build/lib/jung-io-2.0.jar" />
+        <zipfileset excludes="META-INF/*" src="build/lib/jung-jai-2.0.jar" />
+        <zipfileset excludes="META-INF/*" src="build/lib/jung-api-2.0.jar" />
+        <zipfileset excludes="META-INF/*" src="build/lib/jung-graph-impl-2.0.jar" />
+        <zipfileset excludes="META-INF/*" src="build/lib/jung-algorithms-2.0.jar" />
+        <zipfileset excludes="META-INF/*" src="build/lib/collections-generic-4.01.jar" />
+   	    <manifest>
+            <attribute name="Main-Class" value="de.saviodimatteo.madnetsim.${ant.project.name}"/>
+        	<attribute name="Class-Path" value="${project.classpath}"/>
+        	<attribute name="Version-Id" value="${version.num}-b${build.number}"/>
+        </manifest>
+    	
+        	
+        </jar>
+    </target>
+	
+    <target name="run">
+        <java jar="build/jar/${ant.project.name}.jar" fork="true"/>
+    </target>
+
+</project>
