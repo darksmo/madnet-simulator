@@ -1,5 +1,11 @@
-MANIFEST.MF
+*.class
+*.ear
+*.jar
+*.war
 .classpath
+.mtj.tmp/
 .project
-build/
 .settings/
+MANIFEST.MF
+build/
+hs_err_pid*
