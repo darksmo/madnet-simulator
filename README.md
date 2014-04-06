@@ -12,3 +12,5 @@ Presented at IEEE MASS 2011: The 8th IEEE International Conference on Mobile Ad-
 Please cite our paper if you are using this simulator!
 
 For more information visit http://www.savio.dimatteo.it
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/7acf10a0a1f6a790ed0bdebb9afed053 "githalytics.com")](http://githalytics.com/darksmo/madnet-simulator)
